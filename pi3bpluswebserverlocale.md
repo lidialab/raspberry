@@ -38,6 +38,7 @@ Disinstallare pacchetti non necessari
 sudo apt update
 sudo apt upgrade
 sudo apt update
+sudo apt-get install clamav clamav-docs -y
 ```
 
 ## Installare LAMP
@@ -103,4 +104,11 @@ Aggiungere quanto segue dopo "<VirtualHost \*:80>" nel file */etc/apache2/sites-
 Riavviare il server Apache:
 ```
 sudo service apache2 restart
+```
+## WP-CLI
+```
+sudo curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+sudo php wp-cli.phar --info
+sudo chmod +x wp-cli.phar
+sudo mv wp-cli.phar /usr/local/bin/wp
 ```
