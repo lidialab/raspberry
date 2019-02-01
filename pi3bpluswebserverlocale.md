@@ -50,7 +50,19 @@ sudo mysql --user=root
 SET PASSWORD FOR root@localhost = PASSWORD('yourpassword');
 exit
 sudo apt install phpmyadmin -y
+sudo service apache2 restart
 sudo apt-get install vsftpd -y
+```
+In alternativa per configurare mysql/mariadb dopo l'installazione:
+```
+sudo mysql_secure_installation
+Enter current password for root
+Type in Y and press Enter to Set root password?
+Type in a password at the New password: prompt, and press Enter
+Type in Y to Remove anonymous users
+Type in Y to Disallow root login remotely
+Type in Y to Remove test database and access to it
+Type in Y to Reload privilege tables now
 ```
 Per connettersi con programma da altro pc (ad esempio DBEAVER), creare un utente ad hoc e dare i privilegi in base all'IP del pc
 ```
@@ -75,4 +87,20 @@ force_dot_files=YES
 Riavviare il server FTP
 ```
 sudo service vsftpd restart
+```
+
+# WORDPRESS
+Abilitare Apache’s rewrite mod:
+```
+sudo a2enmod rewrite
+```
+Aggiungere quanto segue dopo "<VirtualHost \*:80>" nel file */etc/apache2/sites-available/000-default.conf*:
+```
+<Directory "/var/www/html">
+    AllowOverride All
+</Directory>
+```
+Riavviare il server Apache:
+```
+sudo service apache2 restart
 ```
