@@ -71,6 +71,17 @@ sudo mysql --user=root
 GRANT ALL ON nomedb.* TO 'nomeutente'@'192.168.xx.xx' IDENTIFIED BY 'password' WITH GRANT OPTION;
 flush privileges;
 exit
+```
+Modificare il file */etc/mysql/my.cnf*, aggiungendo le seguenti righe alla fine del file:
+```
+sudo nano /etc/mysql/my.cnf
+
+# LL
+[mysqld]
+bind-address = 0.0.0.0
+```
+Riavviare il server mysql
+```
 sudo service mysql restart
 ```
 
