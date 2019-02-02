@@ -131,6 +131,12 @@ sudo service vsftpd restart
 Collegarsi tramite client ftp (FileZilla...) via SFTP (SSH Ftp).
 
 ## PERMESSI cartelle e file
-Cartelle e file devono essere di proprietà dell'utente del server web.
+Cartelle e file devono essere di proprietà dell'utente del server web (es_www.data per apache).
+```
+sudo chown -R www-data:www-data nomecartella
+```
 Permessi da impostare:
-770 (da approfondire)
+775 per le cartelle, 664 per i file
+```
+sudo find nomecartella -type f -exec chmod 664 {} + -o -type d -exec chmod 775 {} +
+```
