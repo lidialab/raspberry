@@ -129,3 +129,8 @@ Riavviare il server FTP
 sudo service vsftpd restart
 ```
 Collegarsi tramite client ftp (FileZilla...) via SFTP (SSH Ftp).
+
+## PERMESSI cartelle e file
+Cartelle e file devono essere di proprietà dell'utente del server web.
+Permessi da impostare:
+770 (da approfondire)
