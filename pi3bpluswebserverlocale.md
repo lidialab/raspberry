@@ -1,3 +1,5 @@
+**Tutto quello che segue è per un ambiente locale di sviluppo**
+
 # Raspberry Pi 3 B+ come server web locale
 ## Sicurezza
 ### Cambiare password agli utenti pi e root
