@@ -1,9 +1,5 @@
 # Raspberry Pi 3 B+ come server web locale
-
 ## Sicurezza: cambiare password agli utenti pi e root
-Da Menu > Preferenze > Raspberry Pi Configuration > System > Change Password...
-
-Da riga di comando 
 ```
 sudo passwd pi
 sudo passwd root
@@ -17,7 +13,7 @@ sudo adduser nomeutente
 sudo groupadd nomegruppossh
 sudo adduser nomeutente nomegruppossh
 ```
-## Abilitare SSH, abilitare l'accesso per il solo gruppo *nomegruppossh*
+## Abilitare SSH e consentire l'accesso per il solo gruppo *nomegruppossh*
 Da Menu > Preferenze > Raspberry Pi Configuration > Interfaces > SSH: Enable
 
 Abilitare l'accesso per il solo gruppo *nomegruppossh*
@@ -26,12 +22,11 @@ Aggiungere al file /etc/ssh/sshd_config la riga
 AllowGroups nomegruppossh
 ```
 Far ripartire il servizio ssh
-
 ```
 sudo systemctl restart ssh
 ```
 ## Disinstallare pacchetti non necessari
-Disinstallare pacchetti non necessari
+Disinstallare pacchetti non necessari da Menu > Preferenze > Add/Remove Software
 
 ## Aggiornare il sistema
 ```
@@ -40,21 +35,39 @@ sudo apt upgrade
 sudo apt update
 sudo apt-get install clamav clamav-docs -y
 ```
-
 ## Installare LAMP
 ```
 sudo apt install apache2 -y
-sudo chown -R pi:www-data /var/www/html/
+sudo chown -R nomeutente:www-data /var/www/html/
 sudo chmod -R 770 /var/www/html/
 sudo apt install php php-mbstring mysql-server php-mysql -y
-sudo mysql --user=root
-SET PASSWORD FOR root@localhost = PASSWORD('yourpassword');
-exit
 sudo apt install phpmyadmin -y
 sudo service apache2 restart
 sudo apt-get install vsftpd -y
 ```
-In alternativa per configurare mysql/mariadb dopo l'installazione:
+### MySQL/MariaDB
+Creare un nuovo utente che abbia tutti i privilegi per accedere e gestire il DB:
+```
+sudo mysql --user=root
+GRANT ALL ON *.* TO 'nomeutente'@'192.168.xx.xx' IDENTIFIED BY 'password' WITH GRANT OPTION;
+flush privileges;
+exit
+```
+Assicurarsi che il nuovo utente abbia tutti i privilegi per accedere e cambiare password agli altri utenti, quindi cambiare password all'utente root:
+```
+sudo mysql --user=root
+SET PASSWORD FOR root@localhost = PASSWORD('nuovapassword');
+exit
+```
+Accedere da locale con l'utente root:
+```
+sudo mysql --user=root
+[... provare qualche comando di update ...]
+exit
+```
+Quindi restringere gli accessi del nuovo utente a quelli minimi indispensabili.
+
+In alternativa per configurare MySQL/MariaDB dopo l'installazione (ricordarsi la nuova password!!!):
 ```
 sudo mysql_secure_installation
 Enter current password for root
@@ -65,18 +78,11 @@ Type in Y to Disallow root login remotely
 Type in Y to Remove test database and access to it
 Type in Y to Reload privilege tables now
 ```
-Per connettersi con programma da altro pc (ad esempio DBEAVER), creare un utente ad hoc e dare i privilegi in base all'IP del pc
-```
-sudo mysql --user=root
-GRANT ALL ON nomedb.* TO 'nomeutente'@'192.168.xx.xx' IDENTIFIED BY 'password' WITH GRANT OPTION;
-flush privileges;
-exit
-```
-Modificare il file */etc/mysql/my.cnf*, aggiungendo le seguenti righe alla fine del file:
+Per connettersi da remoto o con client (ad esempio DBEAVER)
+Oltre a verificare l'*host* per l'utente nella tabella *user*, modificare il file */etc/mysql/my.cnf*, aggiungendo le seguenti righe alla fine del file (0.0.0.0 può essere sostituito dal singolo ip):
 ```
 sudo nano /etc/mysql/my.cnf
 
-# LL
 [mysqld]
 bind-address = 0.0.0.0
 ```
@@ -84,7 +90,6 @@ Riavviare il server mysql
 ```
 sudo service mysql restart
 ```
-
 ## FTP
 ```
 sudo apt-get install vsftpd
@@ -100,9 +105,8 @@ Riavviare il server FTP
 ```
 sudo service vsftpd restart
 ```
-
 # WORDPRESS
-Abilitare Apache’s rewrite mod:
+## Abilitare Apache’s rewrite mod:
 ```
 sudo a2enmod rewrite
 ```
