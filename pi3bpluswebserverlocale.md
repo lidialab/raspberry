@@ -123,7 +123,6 @@ anonymous_enable=NO
 local_enable=YES
 write_enable=YES
 force_dot_files=YES
-local_root=/home/$USER
 ```
 Riavviare il server FTP
 ```
