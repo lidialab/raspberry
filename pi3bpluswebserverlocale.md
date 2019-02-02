@@ -1,19 +1,20 @@
 # Raspberry Pi 3 B+ come server web locale
-## Sicurezza: cambiare password agli utenti pi e root
+## Sicurezza
+### Cambiare password agli utenti pi e root
 ```
 sudo passwd pi
 sudo passwd root
 ```
-## creare un nuovo utente *nomeutente*
+### Creare un nuovo utente *nomeutente*
 ```
 sudo adduser nomeutente
 ```
-## creare un nuovo gruppo *nomegruppossh* e aggiungere *nomeutente* e/o l'utente *pi*
+### Creare un nuovo gruppo *nomegruppossh* e aggiungere *nomeutente* e/o l'utente *pi*
 ```
 sudo groupadd nomegruppossh
 sudo adduser nomeutente nomegruppossh
 ```
-## Abilitare SSH e consentire l'accesso per il solo gruppo *nomegruppossh*
+### Abilitare SSH e consentire l'accesso per il solo gruppo *nomegruppossh*
 Da Menu > Preferenze > Raspberry Pi Configuration > Interfaces > SSH: Enable
 
 Abilitare l'accesso per il solo gruppo *nomegruppossh*
@@ -90,23 +91,8 @@ Riavviare il server mysql
 ```
 sudo service mysql restart
 ```
-## FTP
-```
-sudo apt-get install vsftpd
-```
-Modificare il file /etc/vsftpd.conf accertandosi delle seguenti configurazioni:
-```
-anonymous_enable=NO
-local_enable=YES
-write_enable=YES
-force_dot_files=YES
-```
-Riavviare il server FTP
-```
-sudo service vsftpd restart
-```
-# WORDPRESS
-## Abilitare Apache’s rewrite mod:
+## WORDPRESS
+###  Abilitare Apache’s rewrite mod:
 ```
 sudo a2enmod rewrite
 ```
@@ -120,10 +106,27 @@ Riavviare il server Apache:
 ```
 sudo service apache2 restart
 ```
-## WP-CLI
+### WP-CLI
 ```
 sudo curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 sudo php wp-cli.phar --info
 sudo chmod +x wp-cli.phar
 sudo mv wp-cli.phar /usr/local/bin/wp
 ```
+## FTP
+```
+sudo apt-get install vsftpd
+```
+Modificare il file /etc/vsftpd.conf accertandosi delle seguenti configurazioni:
+```
+anonymous_enable=NO
+local_enable=YES
+write_enable=YES
+force_dot_files=YES
+local_root=/home/$USER
+```
+Riavviare il server FTP
+```
+sudo service vsftpd restart
+```
+Collegarsi tramite client ftp (FileZilla...) via SFTP (SSH Ftp).
